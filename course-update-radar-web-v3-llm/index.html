@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>课程更新雷达智能体 · 产品雏形</title>
+  <title>课程更新雷达智能体 · 参赛原型（v3 大模型版）</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -16,7 +16,7 @@
         <span class="brand-dot"></span>
         <div>
           <strong>课程更新雷达智能体</strong>
-          <p>网页端产品雏形</p>
+          <p>参赛原型 · v3 大模型版</p>
         </div>
       </div>
 
@@ -24,7 +24,7 @@
         <p class="label">适用方式</p>
         <h1>上传课程文件，让系统按页分析哪里该改</h1>
         <p class="muted">
-          这一版不再是展示站，而是偏产品工作台的原型。建议上传 `PDF` 文件，这样系统可以识别具体页码，并输出“第几页建议更新什么”。
+          这一版用于参赛演示：前端解析 PDF/TXT 并定位页码；后端通过 Serverless 安全调用大模型，输出“第几页该改什么”，并同步生成课堂导入、讨论题、练习题与 PPT 讲稿。
         </p>
       </div>
 
@@ -95,7 +95,7 @@
           <span class="chip">方式3</span>
         </div>
         <p class="muted">
-          这套原型是纯前端静态版本，适合直接部署到 `Netlify`、`Vercel` 或 `GitHub Pages`。无需后端，也不依赖本地 `localhost` 才能运行。
+          已部署到公网（Vercel）。前端负责本地解析与页码抽取，后端 `api/analyze` 通过环境变量读取模型配置与密钥，安全调用大模型生成页码级诊断与“教学焕新包”。默认不保存上传文件内容，请勿上传涉密材料。
         </p>
       </div>
     </aside>
