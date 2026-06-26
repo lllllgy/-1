@@ -350,6 +350,358 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="./app.js"></script>
 </body>
+</html><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>焕课 1.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg-orbit orbit-a"></div>
+  <div class="bg-orbit orbit-b"></div>
+  <div class="noise"></div>
+
+  <header class="hero" id="hero">
+    <nav class="topbar">
+      <a class="brand" href="#hero">
+        <span class="brand-mark"></span>
+        <span>焕新1.0</span>
+      </a>
+      <div class="topbar-links">
+        <a href="#workbench">工作台</a>
+        <a href="#memory">数据记忆</a>
+        <a href="#rewrite">PDF改写</a>
+      </div>
+    </nav>
+
+    <section class="hero-grid">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">焕新1.0</p>
+        <h1>焕新1.0</h1>
+        <p class="hero-text">
+          上传课程 PDF，系统按页定位过时内容，生成教学焕新包，并导出新版 PDF。
+        </p>
+        <div class="hero-actions">
+          <button class="primary-btn" id="enterWorkbench">进入工作台</button>
+          <a class="ghost-btn as-link" href="#memory">查看数据记忆</a>
+        </div>
+        <ul class="hero-points">
+          <li>页码级诊断</li>
+          <li>教学焕新包</li>
+          <li>历史改动可追溯</li>
+          <li>自动改写并导出新版 PDF</li>
+        </ul>
+      </div>
+
+      <div class="book-showcase reveal" id="bookShowcase">
+        <div class="book-scene">
+          <div class="book">
+            <div class="book-shadow"></div>
+            <div class="book-spine"></div>
+            <div class="book-page-layer layer-1"></div>
+            <div class="book-page-layer layer-2"></div>
+            <div class="book-page-layer layer-3"></div>
+            <div class="book-cover">
+              <div class="cover-inner">
+                <p class="cover-mini">HUANKE</p>
+                <h2>焕课 1.0</h2>
+                <span>Course Renewal Engine</span>
+              </div>
+            </div>
+            <div class="book-pages"></div>
+            <div class="book-content">
+              <div class="content-grid">
+                <div>
+                  <p>识别旧案例</p>
+                  <strong>定位到页</strong>
+                </div>
+                <div>
+                  <p>自动生成</p>
+                  <strong>教学焕新包</strong>
+                </div>
+                <div>
+                  <p>智能改写</p>
+                  <strong>输出新版 PDF</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <main class="page-shell">
+    <section class="section status-ribbon reveal">
+      <article class="stat-tile">
+        <span>工作模式</span>
+        <strong>真实分析</strong>
+      </article>
+      <article class="stat-tile">
+        <span>当前状态</span>
+        <strong id="runState">待执行</strong>
+      </article>
+      <article class="stat-tile">
+        <span>数据记忆</span>
+        <strong>自动记录本机历史</strong>
+      </article>
+      <article class="stat-tile">
+        <span>导出能力</span>
+        <strong>文字层 PDF 改写</strong>
+      </article>
+    </section>
+
+    <section class="section reveal" id="workbench">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">工作台</p>
+          <h2>上传、分析、选择页面、生成新版 PDF</h2>
+        </div>
+        <p class="section-note">
+          当前版本不再保留任何演示样例。所有结果都基于你上传的真实文件生成。
+        </p>
+      </div>
+
+      <div class="workbench-grid">
+        <aside class="panel input-panel">
+          <div class="panel-head">
+            <h3>文件输入</h3>
+            <span class="chip">PDF 优先</span>
+          </div>
+
+          <label class="upload-box" for="fileInput">
+            <input id="fileInput" type="file" accept=".pdf,.txt" hidden />
+            <span class="upload-icon">↑</span>
+            <strong>上传课程文件</strong>
+            <small>支持 `.pdf` 和 `.txt`。若要导出新版 PDF，请上传可提取文字的 PDF。</small>
+          </label>
+
+          <div class="file-meta" id="fileMeta">
+            <div>
+              <span>当前状态</span>
+              <strong>未上传文件</strong>
+            </div>
+            <div>
+              <span>页数</span>
+              <strong>--</strong>
+            </div>
+          </div>
+
+          <label>
+            <span>课程名称</span>
+            <input id="courseName" type="text" placeholder="例如：市场营销" />
+          </label>
+
+          <div class="two-col">
+            <label>
+              <span>课程章节</span>
+              <input id="chapterName" type="text" placeholder="例如：品牌传播" />
+            </label>
+            <label>
+              <span>更新深度</span>
+              <select id="updateMode">
+                <option value="保守更新">保守更新</option>
+                <option value="平衡更新" selected>平衡更新</option>
+                <option value="深度更新">深度更新</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            <span>希望达成的教学目标</span>
+            <textarea id="teachingGoal" rows="5" placeholder="例如：希望学生理解新平台环境下品牌传播逻辑的变化，并能用真实案例分析传播路径。"></textarea>
+          </label>
+
+          <div class="action-row">
+            <button class="primary-btn" id="analyzeBtn">开始智能分析</button>
+            <button class="ghost-btn" id="copySummary">复制分析摘要</button>
+          </div>
+
+          <div class="privacy-note">
+            <p>隐私提示</p>
+            <strong>默认不上传原始文件到长期存储，仅保存分析摘要与改写记录到本机浏览器。</strong>
+          </div>
+        </aside>
+
+        <div class="main-stage">
+          <article class="panel progress-panel reveal">
+            <div class="panel-head">
+              <h3>处理进度</h3>
+              <span class="chip subtle">实时状态</span>
+            </div>
+            <div class="progress-list" id="progressList">
+              <div class="progress-item active"><span>1</span><p>读取课程文件</p></div>
+              <div class="progress-item"><span>2</span><p>抽取页面内容</p></div>
+              <div class="progress-item"><span>3</span><p>识别需更新页</p></div>
+              <div class="progress-item"><span>4</span><p>生成改写方案</p></div>
+            </div>
+          </article>
+
+          <article class="panel overview-panel reveal">
+            <div class="panel-head">
+              <h3>分析概览</h3>
+              <span class="chip accent">真实结果</span>
+            </div>
+            <div class="overview-stats">
+              <div class="stat-card">
+                <span>课程文件</span>
+                <strong id="fileNameDisplay">未载入</strong>
+              </div>
+              <div class="stat-card">
+                <span>总页数</span>
+                <strong id="pageCountDisplay">--</strong>
+              </div>
+              <div class="stat-card">
+                <span>需更新页数</span>
+                <strong id="flaggedCountDisplay">--</strong>
+              </div>
+              <div class="stat-card">
+                <span>风险等级</span>
+                <strong id="riskLevelDisplay">待分析</strong>
+              </div>
+            </div>
+            <div class="summary-box">
+              <h4>总体判断</h4>
+              <p id="summaryText">上传课程文件后，系统将在这里给出总体判断。</p>
+            </div>
+          </article>
+
+          <article class="panel page-report-panel reveal">
+            <div class="panel-head">
+              <h3>更新诊断报告</h3>
+              <span class="chip">精确到页码</span>
+            </div>
+            <p class="panel-intro">
+              每张卡片都会明确指出该页为什么该改、怎么改，以及是否纳入自动改写导出。
+            </p>
+            <div id="pageReportList" class="page-report-list">
+              <div class="empty-state">
+                <p>等待分析结果。建议上传可提取文字的 PDF，以获得更准确的页码定位与自动改写能力。</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel materials-panel reveal">
+            <div class="panel-head">
+              <h3>教学焕新包</h3>
+              <span class="chip subtle">自动生成</span>
+            </div>
+            <div class="tab-row">
+              <button class="tab-btn active" data-tab="intro">课堂导入</button>
+              <button class="tab-btn" data-tab="discussion">讨论题</button>
+              <button class="tab-btn" data-tab="exercise">练习题</button>
+              <button class="tab-btn" data-tab="ppt">PPT讲稿</button>
+            </div>
+
+            <div class="tab-panel active" data-panel="intro">
+              <p id="introOutput">生成后将在这里显示。</p>
+            </div>
+            <div class="tab-panel" data-panel="discussion">
+              <p id="discussionOutput">生成后将在这里显示。</p>
+            </div>
+            <div class="tab-panel" data-panel="exercise">
+              <p id="exerciseOutput">生成后将在这里显示。</p>
+            </div>
+            <div class="tab-panel" data-panel="ppt">
+              <p id="pptOutput">生成后将在这里显示。</p>
+            </div>
+          </article>
+
+          <article class="panel preview-panel reveal">
+            <div class="panel-head">
+              <h3>已读取内容预览</h3>
+              <span class="chip subtle">文本抽取</span>
+            </div>
+            <div id="pagePreviewList" class="page-preview-list">
+              <p class="muted-text">上传文件后，会在这里显示前几页的文字摘要。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reveal" id="rewrite">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">智能改写</p>
+          <h2>勾选要处理的页面，自动改字并导出新版 PDF</h2>
+        </div>
+        <p class="section-note">
+          第一版只对文字层 PDF 生效。扫描件、复杂排版页或特殊字体页，可能无法 100% 保持原样。
+        </p>
+      </div>
+
+      <div class="rewrite-grid">
+        <article class="panel rewrite-panel">
+          <div class="panel-head">
+            <h3>导出控制台</h3>
+            <span class="chip accent" id="rewriteCountDisplay">已选择 0 页</span>
+          </div>
+          <p class="panel-intro">
+            系统会基于你在“更新诊断报告”中勾选的页面，自动生成新版文字并覆盖原文字区域，输出一份新的 PDF。
+          </p>
+          <div class="action-row">
+            <button class="primary-btn" id="exportPdfBtn">智能改写并导出新版 PDF</button>
+          </div>
+          <div class="rewrite-status" id="rewriteStatus">尚未生成新版 PDF。</div>
+        </article>
+
+        <article class="panel rewrite-preview-panel">
+          <div class="panel-head">
+            <h3>改写预览</h3>
+            <span class="chip subtle">导出前查看</span>
+          </div>
+          <div id="rewritePreviewList" class="rewrite-preview-list">
+            <div class="empty-state compact">
+              <p>完成分析后，这里会展示即将写入新 PDF 的页面与改写说明。</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="memory">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">数据记忆</p>
+          <h2>查看之前分析了什么、改了哪些页、导出了哪些版本</h2>
+        </div>
+        <button class="ghost-btn" id="clearHistoryBtn">清空本机记录</button>
+      </div>
+
+      <div class="memory-grid">
+        <article class="panel memory-list-panel">
+          <div class="panel-head">
+            <h3>历史记录</h3>
+            <span class="chip subtle" id="historyCount">0 条</span>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </article>
+
+        <article class="panel memory-detail-panel">
+          <div class="panel-head">
+            <h3>改动详情</h3>
+            <span class="chip">可追溯</span>
+          </div>
+          <div id="historyDetail" class="history-detail">
+            <div class="empty-state compact">
+              <p>这里会显示你之前分析过的文件、重点改动页、导出记录和改写说明。</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="./app.js"></script>
+</body>
 </html>
 <!DOCTYPE html>
 <html lang="zh-CN">
