@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>课程更新雷达智能体 · 产品雏形</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar glass-card">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <div>
+          <strong>课程更新雷达智能体</strong>
+          <p>网页端产品雏形</p>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <p class="label">适用方式</p>
+        <h1>上传课程文件，让系统按页分析哪里该改</h1>
+        <p class="muted">
+          这一版不再是展示站，而是偏产品工作台的原型。建议上传 `PDF` 文件，这样系统可以识别具体页码，并输出“第几页建议更新什么”。
+        </p>
+      </div>
+
+      <div class="sidebar-section upload-panel">
+        <div class="panel-header">
+          <h2>课程文件输入</h2>
+          <span class="chip">PDF优先</span>
+        </div>
+
+        <label class="upload-box" for="fileInput">
+          <input id="fileInput" type="file" accept=".pdf,.txt" hidden />
+          <span class="upload-icon">↑</span>
+          <strong>上传课程文件</strong>
+          <small>支持 `.pdf` 和 `.txt`，其中 PDF 可按页分析</small>
+        </label>
+
+        <div class="file-meta" id="fileMeta">
+          <div>
+            <span>当前状态</span>
+            <strong>未上传文件</strong>
+          </div>
+          <div>
+            <span>页数</span>
+            <strong>--</strong>
+          </div>
+        </div>
+
+        <label>
+          <span>课程名称</span>
+          <input id="courseName" type="text" placeholder="例如：市场营销" />
+        </label>
+
+        <div class="two-col">
+          <label>
+            <span>课程章节</span>
+            <input id="chapterName" type="text" placeholder="例如：品牌传播" />
+          </label>
+          <label>
+            <span>更新深度</span>
+            <select id="updateMode">
+              <option value="保守更新">保守更新</option>
+              <option value="平衡更新" selected>平衡更新</option>
+              <option value="深度更新">深度更新</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          <span>希望达成的教学目标</span>
+          <textarea id="teachingGoal" rows="4" placeholder="例如：希望学生理解新平台环境下品牌传播逻辑的变化"></textarea>
+        </label>
+
+        <div class="preset-group">
+          <button class="mini-btn" data-demo="marketing">加载营销示例</button>
+          <button class="mini-btn" data-demo="ecommerce">加载电商示例</button>
+          <button class="mini-btn" data-demo="ai">加载AI导论示例</button>
+        </div>
+
+        <div class="action-row">
+          <button class="ghost-btn" id="useDemoFile">使用内置样例</button>
+          <button class="primary-btn" id="analyzeBtn">开始分析</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section note-panel">
+        <div class="panel-header">
+          <h2>公网部署</h2>
+          <span class="chip">方式3</span>
+        </div>
+        <p class="muted">
+          这套原型是纯前端静态版本，适合直接部署到 `Netlify`、`Vercel` 或 `GitHub Pages`。无需后端，也不依赖本地 `localhost` 才能运行。
+        </p>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <section class="top-strip">
+        <article class="glass-card banner-card">
+          <div>
+            <p class="label">当前流程</p>
+            <h2>上传文件 → 提取页内容 → 定位需更新页 → 生成教学焕新包</h2>
+          </div>
+          <img src="./assets/course_update_dashboard_clean.jpg" alt="产品仪表盘概念图" />
+        </article>
+      </section>
+
+      <section class="main-grid">
+        <article class="glass-card progress-card">
+          <div class="panel-header">
+            <h2>分析进度</h2>
+            <span id="runState">待执行</span>
+          </div>
+          <div class="progress-list" id="progressList">
+            <div class="progress-item active"><span>1</span><p>读取课程文件</p></div>
+            <div class="progress-item"><span>2</span><p>抽取页面内容</p></div>
+            <div class="progress-item"><span>3</span><p>识别过时页码</p></div>
+            <div class="progress-item"><span>4</span><p>生成更新方案</p></div>
+          </div>
+        </article>
+
+        <article class="glass-card overview-card">
+          <div class="panel-header">
+            <h2>分析概览</h2>
+            <button class="text-btn" id="copySummary">复制摘要</button>
+          </div>
+
+          <div class="overview-stats">
+            <div class="stat-card">
+              <span>课程文件</span>
+              <strong id="fileNameDisplay">未载入</strong>
+            </div>
+            <div class="stat-card">
+              <span>总页数</span>
+              <strong id="pageCountDisplay">--</strong>
+            </div>
+            <div class="stat-card">
+              <span>需更新页数</span>
+              <strong id="flaggedCountDisplay">--</strong>
+            </div>
+            <div class="stat-card">
+              <span>风险等级</span>
+              <strong id="riskLevelDisplay">待分析</strong>
+            </div>
+          </div>
+
+          <div class="summary-box">
+            <h3>总体判断</h3>
+            <p id="summaryText">上传课程文件后，系统将在这里给出总体判断。</p>
+          </div>
+        </article>
+
+        <article class="glass-card page-report-card">
+          <div class="panel-header">
+            <h2>更新诊断报告</h2>
+            <span class="chip">精确到页码</span>
+          </div>
+          <p class="muted intro-copy">
+            这里不只做总结，而是明确指出：`第几页存在什么问题，建议怎么改，替换成什么方向`。
+          </p>
+          <div id="pageReportList" class="page-report-list">
+            <div class="empty-state">
+              <img src="./assets/outdated_vs_updated_course_clean.jpg" alt="课程更新前后对比图" />
+              <p>等待分析结果。建议上传 PDF 文件，以获得更准确的按页诊断。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="glass-card materials-card">
+          <div class="panel-header">
+            <h2>教学焕新包</h2>
+            <button class="text-btn" id="useDemoOutput">加载示范输出</button>
+          </div>
+
+          <div class="tab-row">
+            <button class="tab-btn active" data-tab="intro">课堂导入</button>
+            <button class="tab-btn" data-tab="discussion">讨论题</button>
+            <button class="tab-btn" data-tab="exercise">练习题</button>
+            <button class="tab-btn" data-tab="ppt">PPT讲稿</button>
+          </div>
+
+          <div class="tab-panel active" data-panel="intro">
+            <p id="introOutput">生成后将在这里显示。</p>
+          </div>
+          <div class="tab-panel" data-panel="discussion">
+            <p id="discussionOutput">生成后将在这里显示。</p>
+          </div>
+          <div class="tab-panel" data-panel="exercise">
+            <p id="exerciseOutput">生成后将在这里显示。</p>
+          </div>
+          <div class="tab-panel" data-panel="ppt">
+            <p id="pptOutput">生成后将在这里显示。</p>
+          </div>
+        </article>
+
+        <article class="glass-card extracted-card">
+          <div class="panel-header">
+            <h2>已读取内容预览</h2>
+            <span class="chip">供演示查看</span>
+          </div>
+          <div id="pagePreviewList" class="page-preview-list">
+            <p class="muted">上传文件后，会在这里显示前几页的文字摘要。</p>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
