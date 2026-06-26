@@ -1152,6 +1152,15 @@ textarea {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
   <script src="./app-v4.js"></script>
+    <script id="legacy-demo-shim">
+    (() => {
+      const host = document.createElement('div');
+      host.hidden = true;
+      host.setAttribute('aria-hidden', 'true');
+      host.innerHTML = '<button id="useDemoFile" type="button"></button><button id="useDemoOutput" type="button"></button>';
+      document.body.appendChild(host);
+    })();
+  </script>
   <script src="./app.js"></script>
 </body>
 </html>404: Not Found
