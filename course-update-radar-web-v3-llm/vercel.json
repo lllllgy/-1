@@ -11,17 +11,4 @@
       "destination": "/index-main-v4.html"
     }
   ]
-}{
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "api/*.js": {
-      "maxDuration": 60
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/home.html"
-    }
-  ]
 }
